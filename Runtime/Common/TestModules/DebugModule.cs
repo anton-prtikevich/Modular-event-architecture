@@ -6,7 +6,7 @@ namespace ModularEventArchitecture
     {
         public override void Initialize()
         {
-            Entity.PublishGlobalEvent(BasicActionsTypes.Test_Event, new EventBase());
+            Entity.PublishGlobalEvent(new MassageDTO(), true);
         }
 
         [Button("Вывести в консоль события LocalEventBus")]
@@ -24,15 +24,17 @@ namespace ModularEventArchitecture
         [Button("Вызвать тестовое ЛОКАЛЬНОЕ событие")]
         private void TestLocalEvent()
         {
+            Debug.Log("Отправлено ЛОКАЛЬНОЕ событие без ответа");
+
             //вызвать событие без ответа
-            Entity.PublishLocalEvent(BasicActionsTypes.Test_Event, new EventBase());
+            Entity.PublishLocalEvent(new MassageDTO());
         }
 
         [Button("Вызвать тестовое ЛОКАЛЬНОЕ событие с ответом")]
         private void TestLocalResponceEvent()
         {
             //вызвать событие с ответом
-            ResponseEvent response = Entity.PublishLocalEvent<EventBase, ResponseEvent>(BasicActionsTypes.Test_Event, new EventBase());
+            ResponseMassageDTO response = Entity.PublishLocalEvent<MassageDTO, ResponseMassageDTO>(new MassageDTO());
 
             Debug.Log($"Получен ответ на локальный запрос: {response.Result}");
         }
@@ -40,13 +42,15 @@ namespace ModularEventArchitecture
         [Button("Вызвать тестовое ГЛОБАЛЬНОЕ событие")]
         private void TestGlobalEvent()
         {
-            Entity.PublishGlobalEvent(BasicActionsTypes.Test_Event, new EventBase());
+            Debug.Log("Отправлено глобальное событие без ответа");
+
+            Entity.PublishGlobalEvent(new MassageDTO());
         }
 
         [Button("Вызвать тестовое ГЛОБАЛЬНОЕ событие с ответом")]
         private void TestGlobalResponceEvent()
         {
-            ResponseEvent response = Entity.PublishGlobalEvent<EventBase, ResponseEvent>(BasicActionsTypes.Test_Event, new EventBase());
+            ResponseMassageDTO response = Entity.PublishGlobalEvent<MassageDTO, ResponseMassageDTO>(new MassageDTO());
             Debug.Log($"Получен ответ на глобальный запрос: {response.Result}");
         }
     }

@@ -15,7 +15,7 @@ namespace ModularEventArchitecture
         private IDisposable _updateSubscription;
         //-------------------------------------------------------------------------------------
         private LocalEventBus _localEvents;
-        public LocalEventBus LocalEvents
+        private LocalEventBus LocalEvents
         {
             get
             {
@@ -25,8 +25,9 @@ namespace ModularEventArchitecture
                 }
                 return _localEvents;
             }
-            private set => _localEvents = value;
         }
+
+        //-------------------------------------------------------------------------------------
         [SerializeField] [ReadOnly] private List<ModuleBase> _modules = new List<ModuleBase>();
          public List<ModuleBase> Modules
         {
@@ -61,7 +62,6 @@ namespace ModularEventArchitecture
         protected virtual void OnEnable()
         {
             InitializeModules();
-            GlobalEventBus.Instance.Publish(BasicActionsTypes.Unit_Created, new CreateUnitEvent {Unit = this});
 
             // Реактивный Update через UniRx
             _updateSubscription = Observable.EveryUpdate()
@@ -71,71 +71,96 @@ namespace ModularEventArchitecture
 
         protected virtual void OnDisable()
         {
-            GlobalEventBus.Instance.Publish(BasicActionsTypes.Unit_Die, new DieEvent { Unit = this });
             // Отписка от реактивного Update
             _updateSubscription?.Dispose();
         }
         // Подписка -----------------------------------------------------------------------------
 
-        // Подписка на глобальные события через UniRx
-        public void SubscribeGlobalEvent<T>(IEventType eventType, System.Action<T> handler) where T : IEventData
+        // Подписка на глобальные события (message-pipe)
+        public void SubscribeGlobalEvent<T>(Action<T> handler)
         {
-            GlobalEventBus.Instance.Observe<T>(eventType).Subscribe(handler).AddTo(this);
+            GlobalEventBus.Instance.Subscribe<T>(handler).AddTo(this);
         }
-        public void SubscribeGlobalEvent<TRequest, TResponse>(IEventType eventType, Func<TRequest, TResponse> handler)
-        where TRequest : IEventData where TResponse : IEventData
+        public void SubscribeGlobalEvent<TRequest, TResponse>(Func<TRequest, TResponse> handler)
         {
-            GlobalEventBus.Instance.SubscribeRequest<TRequest, TResponse>(eventType, handler);
-        }
-
-        // Подписка на локальные события через UniRx
-        public void SubscribeLocalEvent<T>(IEventType eventType, System.Action<T> handler) where T : IEventData
-        {
-            LocalEvents.Observe<T>(eventType).Subscribe(handler).AddTo(this);
+            GlobalEventBus.Instance.SubscribeRequest<TRequest, TResponse>(handler).AddTo(this);
         }
 
-        public void SubscribeLocalEvent<TRequest, TResponse>(IEventType eventType, Func<TRequest, TResponse> handler)
-        where TRequest : IEventData where TResponse : IEventData
+        // Подписка на локальные события (message-pipe)
+        public void SubscribeLocalEvent<T>(Action<T> handler)
         {
-            LocalEvents.SubscribeRequest<TRequest, TResponse>(eventType, handler);
+            LocalEvents.Subscribe<T>(handler).AddTo(this);
+        }
+        public void SubscribeLocalEvent<TRequest, TResponse>(Func<TRequest, TResponse> handler)
+        {
+            LocalEvents.SubscribeRequest<TRequest, TResponse>(handler).AddTo(this);
         }
 
         //публикация --------------------------------------------------------
 
-        // Вызов глобального события
-        public TResponse PublishGlobalEvent<TRequest, TResponse>(IEventType eventType, TRequest request)
-        where TRequest : IEventData where TResponse : IEventData
+        // Вызов глобального события (message-pipe)
+        public void PublishGlobalEvent<T>(T data, bool nextFrame = false)
+        {
+            if (nextFrame)
+            {
+                Observable.NextFrame().Subscribe(_ => GlobalEventBus.Instance.Publish<T>(data));
+            }
+            else
+            {
+                GlobalEventBus.Instance.Publish<T>(data);
+            }
+        }
+        public void PublishLocalEvent<T>(T data, bool nextFrame = false)
+        {
+            if (nextFrame)
+            {
+                Observable.NextFrame().Subscribe(_ => LocalEvents.Publish<T>(data));
+            }
+            else
+            {
+                LocalEvents.Publish<T>(data);
+            }
+        }
+        public TResponse PublishGlobalEvent<TRequest, TResponse>(TRequest request, Action<TResponse> onResponse = null, bool nextFrame = false)
         {
             TResponse callback = default;
-            
-            GlobalEventBus.Instance.PublishRequest<TRequest, TResponse>(eventType, request).Subscribe(response =>
+            Action publish = () =>
             {
-                callback = response;
-            });
-
+                GlobalEventBus.Instance.PublishRequest<TRequest, TResponse>(request).Subscribe(response =>
+                {
+                    onResponse?.Invoke(response);
+                    callback = response;
+                });
+            };
+            if (nextFrame)
+            {
+                Observable.NextFrame().Subscribe(_ => publish());
+            }
+            else
+            {
+                publish();
+            }
             return callback;
         }
-        // Вызов глобального события
-        public void PublishGlobalEvent<T>(IEventType eventType, T data) where T : IEventData
-        {
-            GlobalEventBus.Instance.Publish(eventType, data);
-        }
-
-        // Вызов локального события
-        public void PublishLocalEvent<T>(IEventType eventType, T data) where T : IEventData
-        {
-            LocalEvents.Publish(eventType, data);
-        }
-
-        public TResponse PublishLocalEvent<TRequest, TResponse>(IEventType eventType, TRequest request)
-        where TRequest : IEventData where TResponse : IEventData
+        public TResponse PublishLocalEvent<TRequest, TResponse>(TRequest request, Action<TResponse> onResponse = null, bool nextFrame = false)
         {
             TResponse callback = default;
-            LocalEvents.PublishRequest<TRequest, TResponse>(eventType, request).Subscribe(response =>
+            Action publish = () =>
             {
-                callback = response;
-            });
-
+                LocalEvents.PublishRequest<TRequest, TResponse>(request).Subscribe(response =>
+                {
+                    onResponse?.Invoke(response);
+                    callback = response;
+                });
+            };
+            if (nextFrame)
+            {
+                Observable.NextFrame().Subscribe(_ => publish());
+            }
+            else
+            {
+                publish();
+            }
             return callback;
         }
 

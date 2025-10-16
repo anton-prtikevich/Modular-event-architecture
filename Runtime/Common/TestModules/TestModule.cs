@@ -8,35 +8,35 @@ namespace ModularEventArchitecture
         public override void Initialize()
         {
             // Подписка на тестовые события которое без колбэка
-            Entity.SubscribeLocalEvent<EventBase>(BasicActionsTypes.Test_Event, TestLocal);
+            Entity.SubscribeLocalEvent<MassageDTO>(TestLocal);
 
             // Подписка на тестовое событие которое с колбэком
-            Entity.SubscribeLocalEvent<EventBase, ResponseEvent>(BasicActionsTypes.Test_Event, OnTestLocalResponse);
+            Entity.SubscribeLocalEvent<MassageDTO, ResponseMassageDTO>(OnTestLocalResponse);
 
             // Подписка на глобальные тестовые события которое без колбэка
-            Entity.SubscribeGlobalEvent<EventBase>(BasicActionsTypes.Test_Event, OnTestGlobal);
+            Entity.SubscribeGlobalEvent<MassageDTO>(OnTestGlobal);
 
             // Подписка на глобальные тестовые события которое с колбэком
-            Entity.SubscribeGlobalEvent<EventBase, ResponseEvent>(BasicActionsTypes.Test_Event, OnTestGlobalResponse);
+            Entity.SubscribeGlobalEvent<MassageDTO, ResponseMassageDTO>(OnTestGlobalResponse);
         }
 
-        private void TestLocal(EventBase eventBase)
+        private void TestLocal(MassageDTO eventBase)
         {
-            Debug.Log($"<color=green>Тестовое ЛОКАЛЬНОЕ событие</color> на объекте {Entity.name}");
+            Debug.Log($"<color=green> Получено тестовое ЛОКАЛЬНОЕ событие</color> на объекте {Entity.name}");
         }
-        private ResponseEvent OnTestLocalResponse(EventBase eventBase)
+        private ResponseMassageDTO OnTestLocalResponse(MassageDTO eventBase)
         {
-            Debug.Log($"<color=green>Тестовое ЛОКАЛЬНОЕ событие</color> на объекте {Entity.name} <color=green> С ОТВЕТОМ</color>");
-            return new ResponseEvent { Result = "Колбэк" };
+            Debug.Log($"<color=green> Получено тестовое ЛОКАЛЬНОЕ событие</color> на объекте {Entity.name} <color=green> и направлен ответ</color>");
+            return new ResponseMassageDTO { Result = "Колбэк" };
         }
-        private void OnTestGlobal(EventBase eventBase)
+        private void OnTestGlobal(MassageDTO eventBase)
         {
-            Debug.Log($"<color=red>Тестовое ГЛОБАЛЬНОЕ событие</color> на объекте {Entity.name}");
+            Debug.Log($"<color=red> Получено тестовое ГЛОБАЛЬНОЕ событие</color> на объекте {Entity.name}");
         }
-        private ResponseEvent OnTestGlobalResponse(EventBase eventBase)
+        private ResponseMassageDTO OnTestGlobalResponse(MassageDTO eventBase)
         {
-            Debug.Log($"<color=red>Тестовое ГЛОБАЛЬНОЕ событие</color> на объекте {Entity.name} <color=red> С ОТВЕТОМ</color>");
-            return new ResponseEvent { Result = "Колбэк" };
+            Debug.Log($"<color=red> Получено тестовое ГЛОБАЛЬНОЕ событие</color> на объекте {Entity.name} <color=red> и направлен ответ</color>");
+            return new ResponseMassageDTO { Result = "Колбэк" };
         }
 
         public override void UpdateMe()
