@@ -105,7 +105,7 @@ public class AssemblyDetailsWindow : EditorWindow
         EditorGUILayout.BeginHorizontal();
         GUILayout.Label("Документация:", EditorStyles.boldLabel);
 
-        string docPath = _featureFolder != null ? System.IO.Path.Combine(_featureFolder, "Documentation.txt") : null;
+        string docPath = _featureFolder != null ? System.IO.Path.Combine(_featureFolder, "README.md") : null;
         bool docExists = docPath != null && System.IO.File.Exists(docPath);
 
         if (!docExists)

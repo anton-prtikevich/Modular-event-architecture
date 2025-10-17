@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: FeatureGeneratorSettings
   m_EditorClassIdentifier: 
   defaultAsmdefReferences:
-  - ModularEventArchitecture.Editor
+  - ModularEventArchitecture

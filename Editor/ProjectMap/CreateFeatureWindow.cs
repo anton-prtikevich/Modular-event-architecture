@@ -98,7 +98,7 @@ namespace ModularEventArchitecture.Editor.ProjectMap.Map
             }
 
             // Создаём файл документации
-            string docPath = featurePath + "/Documentation.txt";
+            string docPath = featurePath + "/README.md";
             if (!System.IO.File.Exists(docPath))
             {
                 System.IO.File.WriteAllText(docPath, $"Документация для {featureName}\n\n...");
