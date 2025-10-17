@@ -5,7 +5,7 @@ using System.Reflection;
 namespace ModularEventArchitecture
 {
     [CustomEditor(typeof(ScriptableObject), true)]
-    public class ButtonAttributeEditor : Editor
+    public class ButtonAttributeEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

@@ -4,11 +4,12 @@ using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.Linq;
 using System.Reflection;
+using ModularEventArchitecture;
 
 namespace ModularEventArchitecture
 {
-    [CustomEditor(typeof(ModuleBase), true)]
-    public class ModulesEditor : Editor
+[CustomEditor(typeof(ModuleBase), true)]
+    public class ModulesEditor : UnityEditor.Editor
     {
         //-------------------------------------------------------------------------------------
         private ModuleBase _targetModule;

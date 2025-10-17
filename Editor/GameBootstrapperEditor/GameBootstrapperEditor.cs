@@ -11,7 +11,7 @@ using System.Reflection;
 namespace ModularEventArchitecture
 {
     [CustomEditor(typeof(GameBootstrapper))]
-    public class GameBootstrapperEditor : Editor
+    public class GameBootstrapperEditor : UnityEditor.Editor
     {
         public VisualTreeAsset treeAsset;
 

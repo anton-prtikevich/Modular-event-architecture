@@ -11,7 +11,7 @@ using System.Reflection;
 namespace ModularEventArchitecture
 {
     [CustomEditor(typeof(GameEntity), true)]
-    public class GameEntityEditor : Editor
+    public class GameEntityEditor : UnityEditor.Editor
     {
         //-------------------------------------------------------------------------------------
         public VisualTreeAsset treeAsset;
