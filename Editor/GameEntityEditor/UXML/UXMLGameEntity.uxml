@@ -5,7 +5,7 @@
         <ui:Label tabindex="-1" text="Материнская часть" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Label" style="font-size: 20px; white-space: normal;" />
         <ui:VisualElement style="background-image: none; width: 70px; height: 70px; display: flex;" />
     </ui:VisualElement>
-    <ui:VisualElement name="Plane2" style="flex-grow: 1;">
+    <ui:VisualElement name="Plane2" style="flex-grow: 1; flex-direction: column;">
         <ui:VisualElement name="Buttons" class="Selector" style="flex-grow: 1; background-color: rgb(43, 43, 43); border-left-color: rgb(0, 0, 0); border-right-color: rgb(0, 0, 0); border-top-color: rgb(0, 0, 0); border-bottom-color: rgb(0, 0, 0); border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px;">
             <ui:Button text="+ Добавить модуль" parse-escape-sequences="true" display-tooltip-when-elided="true" name="Button_ADDMondule" class="button" />
             <ui:VisualElement name="ModulesContainer" style="flex-grow: 1;" />
