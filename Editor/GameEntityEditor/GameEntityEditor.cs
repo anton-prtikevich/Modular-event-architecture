@@ -131,30 +131,21 @@ namespace ModularEventArchitecture
 
             _modulesContainer.Clear();
 
-            // Получаем все типы модулей
+            // Получаем все типы модулей из всех сборок
             var moduleTypes = new HashSet<Type>();
-
-            var assemblyCSharp = AppDomain.CurrentDomain.GetAssemblies()
-                .FirstOrDefault(assembly => assembly.GetName().Name == "Assembly-CSharp");
-            if (assemblyCSharp != null)
+            var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in allAssemblies)
             {
-                var csharpModules = assemblyCSharp.GetTypes()
-                    .Where(t => typeof(ModuleBase).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-                foreach (var type in csharpModules)
+                try
                 {
-                    moduleTypes.Add(type);
+                    var types = assembly.GetTypes()
+                        .Where(t => typeof(ModuleBase).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
+                    foreach (var type in types)
+                    {
+                        moduleTypes.Add(type);
+                    }
                 }
-            }
-
-            var currentAssembly = Assembly.GetAssembly(typeof(ModuleBase));
-            if (currentAssembly != null)
-            {
-                var assemblyModules = currentAssembly.GetTypes()
-                    .Where(t => typeof(ModuleBase).IsAssignableFrom(t) && !t.IsInterface && !t.IsAbstract);
-                foreach (var type in assemblyModules)
-                {
-                    moduleTypes.Add(type);
-                }
+                catch { /* некоторые сборки могут выбрасывать исключения при GetTypes */ }
             }
 
             // Получаем ScriptableObject TagsBuilder
