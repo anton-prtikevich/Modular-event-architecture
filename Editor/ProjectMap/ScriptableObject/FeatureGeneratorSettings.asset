@@ -12,5 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0b45243fb110b847af40a32d8fd6a86, type: 3}
   m_Name: FeatureGeneratorSettings
   m_EditorClassIdentifier: 
-  defaultAsmdefReferences:
+  DefaultAsmdefReferences:
   - ModularEventArchitecture
+  ExcludedAsmdefs:
+  - ModularEventArchitecture
+  - ModularEventArchitecture.Editor
+  - ModularEventArchitecture.Editor.SamplesEditor
+  - UniRx
+  - UniRx.Examples
