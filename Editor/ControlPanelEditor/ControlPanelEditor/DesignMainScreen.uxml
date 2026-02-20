@@ -1,0 +1,19 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="True">
+    <Style src="project://database/Assets/Scripts/Modular-event-architecture/Editor/ControlPanelEditor/ControlPanelEditor/BehavioureTree/BehavioureTreeEdtor.uss?fileID=7433441132597879392&amp;guid=bb23dbd97962fe444915d8aa51fe155c&amp;type=3#BehavioureTreeEdtor" />
+    <uie:Toolbar>
+        <ui:Button text="Обновить" display-tooltip-when-elided="true" name="populateBUtton" />
+    </uie:Toolbar>
+    <uie:ToolbarMenu tabindex="-1" display-tooltip-when-elided="true" text="Асеты" style="width: 69px;" />
+    <SplitVuew fixed-pane-initial-dimension="300">
+        <ui:VisualElement name="Left-Panel" style="flex-grow: 1; background-color: rgba(255, 255, 255, 0);">
+            <ui:Label tabindex="0" text="Контрольная панель" display-tooltip-when-elided="true" style="background-color: rgb(32, 32, 32); -unity-background-scale-mode: stretch-to-fill;" />
+            <ControlPanelView style="height: auto;" />
+        </ui:VisualElement>
+        <ui:VisualElement name="Right-Panel" style="flex-grow: 1; background-color: rgba(0, 0, 0, 0);">
+            <MainScreenView focusable="true" style="flex-grow: 1;">
+                <ui:Label tabindex="-1" text="Доска" display-tooltip-when-elided="true" style="background-color: rgb(32, 32, 32);" />
+            </MainScreenView>
+        </ui:VisualElement>
+    </SplitVuew>
+    <ControlPanelView />
+</ui:UXML>
