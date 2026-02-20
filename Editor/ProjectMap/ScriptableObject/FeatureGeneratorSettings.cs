@@ -10,6 +10,7 @@ namespace ModularEventArchitecture.Editor.ProjectMap
     [CreateAssetMenu(fileName = "FeatureGeneratorSettings", menuName = "ModularEventArchitecture/Feature Generator Settings")]
     public class FeatureGeneratorSettings : ScriptableObject
     {
-        public List<string> defaultAsmdefReferences = new List<string> { "ModularEventArchitecture" };
+        public List<string> DefaultAsmdefReferences = new List<string> { "ModularEventArchitecture" };
+        public List<string> ExcludedAsmdefs = new List<string>();
     }
 }

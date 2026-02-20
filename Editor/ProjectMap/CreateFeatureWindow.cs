@@ -88,8 +88,8 @@ namespace ModularEventArchitecture.Editor.ProjectMap.Map
             if (!System.IO.File.Exists(asmdefPath))
             {
                 // Получаем зависимости из настроек или по умолчанию
-                var refs = settings != null && settings.defaultAsmdefReferences != null && settings.defaultAsmdefReferences.Count > 0
-                    ? settings.defaultAsmdefReferences
+                var refs = settings != null && settings.DefaultAsmdefReferences != null && settings.DefaultAsmdefReferences.Count > 0
+                    ? settings.DefaultAsmdefReferences
                     : new System.Collections.Generic.List<string> { "ModularEventArchitecture.Editor" };
                 string refsJson = string.Join(",\n    ", refs.ConvertAll(r => "\"" + r + "\""));
                 string asmdefJson = $"{{\n  \"name\": \"{featureName}\",\n  \"references\": [\n    {refsJson}\n  ]\n}}";

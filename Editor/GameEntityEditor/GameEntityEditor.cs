@@ -148,13 +148,6 @@ namespace ModularEventArchitecture
                 catch { /* некоторые сборки могут выбрасывать исключения при GetTypes */ }
             }
 
-            // Получаем ScriptableObject TagsBuilder
-            var tagsBuilder = UnityEditor.AssetDatabase.FindAssets("t:TagsBuilder")
-                .Select(guid => UnityEditor.AssetDatabase.GUIDToAssetPath(guid))
-                .Select(path => UnityEditor.AssetDatabase.LoadAssetAtPath<UnityEngine.ScriptableObject>(path))
-                .OfType<ModularEventArchitecture.TagsBuilder>()
-                .FirstOrDefault();
-
             // Получаем текущие теги сущности (массив строк)
             string[] entityTags = null;
             var tagField = _targetEntity.GetType().GetField("EntityTag");
@@ -174,25 +167,20 @@ namespace ModularEventArchitecture
                     entityTags = new string[] { tagValue.ToString() };
                 }
             }
-
-            // Фильтруем модули по TagsBuilder.ModuleTagPairs
+            // Фильтруем модули по совпадению имени сборки модуля и тегов EntityTag
             var compatibleModules = moduleTypes.Where(moduleType =>
             {
-                if (tagsBuilder == null || tagsBuilder.ModuleTagPairs == null)
-                    return true; // если нет ScriptableObject — показываем все
-
-                var pair = tagsBuilder.ModuleTagPairs.FirstOrDefault(p => p.ModuleReference == moduleType.Name);
-                if (pair == null || string.IsNullOrEmpty(pair.CompatibleTag))
+                // Если у сущности нет тегов — показываем все модули
+                if (entityTags == null || entityTags.Length == 0)
                     return true;
 
-                // Сравниваем каждый тег
-                if (entityTags == null || entityTags.Length == 0)
-                    return false;
+                var assemblyName = moduleType.Assembly.GetName().Name;
+                if (string.IsNullOrEmpty(assemblyName)) return false;
 
                 foreach (var tag in entityTags)
                 {
-                    if (pair.CompatibleTag == tag)
-                        return true;
+                    if (string.IsNullOrEmpty(tag)) continue;
+                    if (tag == assemblyName) return true;
                 }
                 return false;
             });
