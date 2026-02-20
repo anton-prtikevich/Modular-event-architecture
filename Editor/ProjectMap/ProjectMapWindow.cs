@@ -19,13 +19,12 @@ public class ProjectMapWindow : EditorWindow
     private Dictionary<string, Rect> _assemblyRects = new Dictionary<string, Rect>();
     private Dictionary<string, List<string>> _dependencies = new Dictionary<string, List<string>>();
     private Vector2 _scrollPosition;
-    private float _zoom = 1f;
     //!---------------------------------------------------------------------
 
     // Выбранная папка для поиска сборок
     private DefaultAsset selectedFolder;
 
-    [MenuItem("Tools/Архитектура/Карта проекта")]
+    [MenuItem("Tools/Карта проекта")]
     public static void ShowWindow() => GetWindow<ProjectMapWindow>("Карта проекта");
 
     void OnGUI()
