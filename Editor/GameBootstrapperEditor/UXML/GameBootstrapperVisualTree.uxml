@@ -1,7 +1,0 @@
-<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
-    <Style src="project://database/Assets/Scripts/Modular-event-architecture/Editor/GameBootstrapperEditor/UXML/GameBootstrapperEditorStyle.uss?fileID=7433441132597879392&amp;guid=ab832c1a40d1a3143b50a11e5b61e75c&amp;type=3#GameBootstrapperEditorStyle" />
-    <ui:VisualElement name="Container">
-        <ui:Button name="Button_AddManager" text="Добавить менеджер" class="add-manager-button" />
-        <ui:VisualElement name="ManagersContainer" class="managers-container" style="display: none;" />
-    </ui:VisualElement>
-</ui:UXML>
