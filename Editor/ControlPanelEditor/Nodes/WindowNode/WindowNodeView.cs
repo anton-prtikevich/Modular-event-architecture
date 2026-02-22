@@ -293,10 +293,52 @@ public class WindowNodeView : UnityEditor.Experimental.GraphView.Node
 
     private static string GetScriptPath()
     {
-        string scriptGUID = AssetDatabase.FindAssets($"t:Script {nameof(WindowNodeView)}")[0];
-        string scriptPath = AssetDatabase.GUIDToAssetPath(scriptGUID);
-        string directoryPath = Path.GetDirectoryName(scriptPath);
-        return directoryPath;
+        // Безопасный поиск: ищем MonoScript с классом WindowNodeView.
+        // Предпочитаем скрипты из Packages, затем из Assets. Если ничего не найдено — фолбек на старый поиск и "Assets".
+        var guids = AssetDatabase.FindAssets("t:MonoScript");
+        string assetsPath = null;
+        string packagesPath = null;
+
+        foreach (var guid in guids)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            var mono = AssetDatabase.LoadAssetAtPath<MonoScript>(path);
+            if (mono == null) continue;
+
+            var cls = mono.GetClass();
+            // Сравниваем по типу или по имени (безопасно при разных сборках)
+            if (cls == typeof(WindowNodeView) || (cls != null && cls.FullName == typeof(WindowNodeView).FullName))
+            {
+                if (path.StartsWith("Packages/", StringComparison.OrdinalIgnoreCase))
+                {
+                    packagesPath = Path.GetDirectoryName(path);
+                    break; // предпочитаем пакетную версию
+                }
+                if (path.StartsWith("Assets/", StringComparison.OrdinalIgnoreCase))
+                {
+                    assetsPath = Path.GetDirectoryName(path);
+                }
+                else if (assetsPath == null)
+                {
+                    assetsPath = Path.GetDirectoryName(path);
+                }
+            }
+        }
+
+        var chosen = packagesPath ?? assetsPath;
+        if (!string.IsNullOrEmpty(chosen)) return chosen;
+
+        // Фолбек на старый поиск, но с проверкой на пустой результат
+        var fallback = AssetDatabase.FindAssets($"t:Script {nameof(WindowNodeView)}");
+        if (fallback != null && fallback.Length > 0)
+        {
+            var scriptPath = AssetDatabase.GUIDToAssetPath(fallback[0]);
+            var dir = Path.GetDirectoryName(scriptPath);
+            if (!string.IsNullOrEmpty(dir)) return dir;
+        }
+
+        // Крайний фолбек
+        return "Assets";
     }
 
     //тут меняется позиция ноду, так же отвечает за перетаскивание
