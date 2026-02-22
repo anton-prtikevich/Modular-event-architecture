@@ -15,4 +15,4 @@ MonoBehaviour:
   designMainScreen: {fileID: 9197481963319205126, guid: 44fdb1e4bf4647c4c83eff82c293ec41, type: 3}
   BoardButtonTemplate: {fileID: 9197481963319205126, guid: 0db9534de2784584890e42054ad9e6f5, type: 3}
   behaviourTreeEditorStyle: {fileID: 7433441132597879392, guid: bb23dbd97962fe444915d8aa51fe155c, type: 3}
-  boardsFolder: {fileID: 102900000, guid: 400545b08e7332645a3b7cf8f87922e6, type: 3}
+  WindowNodeView: {fileID: 9197481963319205126, guid: 8e8fadbc52ec8ab42a5ee8a8ef94cd27, type: 3}
