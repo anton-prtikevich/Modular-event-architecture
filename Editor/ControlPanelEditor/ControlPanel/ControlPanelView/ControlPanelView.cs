@@ -57,7 +57,7 @@ using UnityEngine.UIElements;
                 string boardName = nameField.value.Trim();
                 if (string.IsNullOrEmpty(boardName)) return;
 
-                var config = ControlPanelEditorConfig.Instance;
+                var config = BoardsFolderConfig.Instance;
                 string boardsFolderPath;
 
                 if (config != null && config.boardsFolder != null)

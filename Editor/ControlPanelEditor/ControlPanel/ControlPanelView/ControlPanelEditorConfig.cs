@@ -12,9 +12,6 @@ public class ControlPanelEditorConfig : ScriptableObject
     [Header("Style Sheets")]
     public StyleSheet behaviourTreeEditorStyle;
 
-    [Header("Folders")]
-    [Tooltip("Папка для сохранения досок (BehavioureTree assets)")]
-    public DefaultAsset boardsFolder;
 
     private static ControlPanelEditorConfig _instance;
 
