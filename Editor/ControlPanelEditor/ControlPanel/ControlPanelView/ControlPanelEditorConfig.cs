@@ -12,6 +12,9 @@ public class ControlPanelEditorConfig : ScriptableObject
     [Header("Style Sheets")]
     public StyleSheet behaviourTreeEditorStyle;
 
+    [Header("Nods")]
+    public VisualTreeAsset WindowNodeView;
+    public WindowNodeView WindowNode;
 
     private static ControlPanelEditorConfig _instance;
 
