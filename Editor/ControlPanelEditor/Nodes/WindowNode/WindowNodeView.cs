@@ -41,22 +41,8 @@ public class WindowNodeView : UnityEditor.Experimental.GraphView.Node
     private bool _isSelected;
     private IMGUIContainer _container1;
 
-    public WindowNodeView(NodeBase node, MainScreenView mainScreenView) : base()
+    public WindowNodeView(NodeBase node, MainScreenView mainScreenView) : base(Path.Combine(GetScriptPath(), "WindowNodeView.uxml"))
     {
-        // Попытка безопасно загрузить UXML шаблон: сначала искать в Packages, затем в Assets
-        try
-        {
-            string uxmlPath = FindUxmlPath("WindowNodeView.uxml", "WindowNodeView");
-            if (!string.IsNullOrEmpty(uxmlPath))
-            {
-                var vta = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(uxmlPath);
-                if (vta != null)
-                {
-                    vta.CloneTree(this);
-                }
-            }
-        }
-        catch (Exception) { }
         windowNodeModel = node as WindowNodeModel;
         this.node = node;
         this.title = node.name;
@@ -353,36 +339,6 @@ public class WindowNodeView : UnityEditor.Experimental.GraphView.Node
 
         // Крайний фолбек
         return "Assets";
-    }
-
-    private static string FindUxmlPath(string fileName, string assetNameWithoutExtension)
-    {
-        // Ищем по типу VisualTreeAsset и по имени ассета
-        // Сначала пытаемся найти в Packages
-        var pkgGuids = AssetDatabase.FindAssets($"t:VisualTreeAsset {assetNameWithoutExtension}", new[] { "Packages" });
-        if (pkgGuids != null && pkgGuids.Length > 0)
-        {
-            var p = AssetDatabase.GUIDToAssetPath(pkgGuids[0]);
-            if (!string.IsNullOrEmpty(p)) return p;
-        }
-
-        // Потом в Assets
-        var assetGuids = AssetDatabase.FindAssets($"t:VisualTreeAsset {assetNameWithoutExtension}", new[] { "Assets" });
-        if (assetGuids != null && assetGuids.Length > 0)
-        {
-            var p = AssetDatabase.GUIDToAssetPath(assetGuids[0]);
-            if (!string.IsNullOrEmpty(p)) return p;
-        }
-
-        // Попробуем найти файл .uxml напрямую (редкий fallback)
-        var uxmlGuids = AssetDatabase.FindAssets(fileName);
-        if (uxmlGuids != null && uxmlGuids.Length > 0)
-        {
-            var p = AssetDatabase.GUIDToAssetPath(uxmlGuids[0]);
-            if (!string.IsNullOrEmpty(p)) return p;
-        }
-
-        return null;
     }
 
     //тут меняется позиция ноду, так же отвечает за перетаскивание
